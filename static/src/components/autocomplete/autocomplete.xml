@@ -1,0 +1,17 @@
+<templates>
+    <t t-name="travels_erp.AutocompleteTemplate">
+        <div class="form-group">
+            <label for="" class=""><t t-esc="props.label"/></label>
+            <input type="text" t-on-focus="onFocusInput" t-att-placeholder="props.placeholder" t-att-autocomplete="'off'" id="city" t-on-input="debouncedOnChangeInput" t-model="state.inputValue" class="position-relative form-control" />
+            <t t-if="state.isDropdownVisible">
+                <ul class="p-0 border rounded shadow auto_complete_box list-style-none">
+                    <t t-foreach="props.options" t-as="val" t-key="val.value">
+                        <li class="" t-on-click="() => onClickSelect(val)" t-att-value="val.value">
+                            <t t-esc="val.label"/>
+                        </li>
+                    </t>
+                </ul>
+            </t>
+        </div>
+    </t>
+</templates>

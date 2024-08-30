@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <!-- Define the action report invoice -->
+        <record id="action_travel_erp_report_invoice" model="ir.actions.report">
+            <field name="name">Invoice Slip</field>
+            <field name="model">travels.invoice.master</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">travels_erp.accounting_report_invoice</field>
+            <field name="report_file">travels_erp.accounting_report_invoice</field>
+            <field name="binding_model_id" ref="model_travels_invoice_master"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

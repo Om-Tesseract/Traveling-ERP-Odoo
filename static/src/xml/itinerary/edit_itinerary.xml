@@ -1,0 +1,1460 @@
+<template id="travel_edit_itinerary_template" name="travel_edit_itinerary_template">
+    <t t-name="travel_edit_itinerary_template">
+        <style> .grid-class { display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: .5rem;
+            gap: .5rem; margin-top: 1rem; } .stepper { display: flex; justify-content:
+            space-between; background-color: #FFFFFF; border-radius: 5px; padding: 1rem;
+            margin-bottom: 1rem; } .step { display: flex; align-items: center; position: relative;
+            padding: 10px 15px; text-align: center; cursor: pointer; transition: all 0.3s ease; }
+            .step-number { display: inline-block; width: 25px; height: 25px; line-height: 25px;
+            border-radius: 50%; background-color: #e9ecef; color: #6c757d; font-weight: bold;
+            margin-right: 10px; } .step-title { font-size: 14px; color: #6c757d; } .step.active
+            .step-number { background-color: #007bff; color: white; } .step.active .step-title {
+            color: #000; } .step::after { content: ''; position: absolute; width: 100%; height: 2px;
+            background-color: #e9ecef; top: 50%; left: 50%; z-index: -1; transition: all 0.3s ease;
+            } .step.active::after { background-color: #007bff; } .step:not(:last-child)::after {
+            width: calc(100% - 45px); left: calc(50% + 20px); } .step:last-child::after { display:
+            none; } .step.active { <!-- background-color: #007bff; --> color: #007bff; } .step.completed { background-color: #28a745;
+            color: white; } .stepper-content { display: none; } .stepper-content.active { display:
+            block; } .navigation-buttons { display: flex; justify-content: space-between;
+            margin-top: 1rem; } .review_count{ min-width: 2rem !important; height: 2rem;
+            border-radius: 4px; background-color: var(--primary); padding: .5rem; color: #fff; }
+            hotelstarrating{ color: #efd211 !important; margin-right: .5rem; font-size: 1.5rem;
+            }.text-ellipsis{ max-width: 100%; display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; margin: 0;
+            margin-top: 1rem; font-size: .8em; color: #000; } </style>
+        <div class="main-content">
+            <!-- <div class="d-flex gap-1 o_control_panel d-flex align-items-center  px-3 pt-2 pb-2">
+                <div class="active d-flex fs-4 min-w-0 align-items-center">
+                    <span class="min-w-0 text-truncate text-left">
+                        Update Trip Detail
+
+                    </span>
+                </div>
+
+
+            </div> -->
+            <div class="stepper shadow mx-3 my-3">
+                <div class="step" t-att-class="state.current_step >= 1 ? 'active' : ''"
+                    t-on-click="() => set_step(1)">
+                    <span class="step-number">1</span>
+                    <span class="step-title">Update Basic Trip</span>
+                </div>
+                <div class="step" t-att-class="state.current_step >= 2 ? 'active' : ''"
+                    t-on-click="() => set_step(2)">
+                    <span class="step-number">2</span>
+                    <span class="step-title">Hotel Booking</span>
+                </div>
+                <div class="step" t-att-class="state.current_step >= 3 ? 'active' : ''"
+                    t-on-click="() => set_step(3)">
+                    <span class="step-number">3</span>
+                    <span class="step-title">Road Transport</span>
+                </div>
+                <div class="step" t-att-class="state.current_step >= 4 ? 'active' : ''"
+                    t-on-click="() => set_step(4)">
+                    <span class="step-number">4</span>
+                    <span class="step-title">Final Itinerary</span>
+                </div>
+            </div>
+            <div class="stepper-content" t-att-class="state.current_step == 1 ? 'active' : ''">
+                <div class="row" style="--gutter-x: 0px;">
+                    <div class="col-8 ">
+                        <div class="d-flex px-3 py-3 justify-content-between align-items-center">
+                            <div class="">
+                                <h1>
+                                    Trip Destination
+                                </h1>
+                            </div>
+                            <div>
+                                <button t-on-click="()=>edit_action()" class="btn btn-primary">
+                                    Edit Trip
+                                </button>
+                            </div>
+                        </div>
+                        <t t-foreach="state.itinerary.city_nights" t-as="data" t-key="data.id">
+                            <div class="card shadow mx-3 my-2">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                        <img t-att-src="'data:image/jpeg;base64,'+data.img"
+                                            class="img-fluid rounded-start"
+                                            style="    height: 100%;
+    object-fit: cover;"
+                                            alt="..." />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <h2 class="mb-0 ">
+                                                    <t t-esc="data.city_name" />
+                                                    <small>
+                                                        <t t-esc="data.state" />, <t
+                                                            t-esc="data.country" />
+                                                    </small>
+                                                </h2>
+                                            </div>
+                                            <div class="text-primary fs-3">
+                                                <i class="fa fa-moon-o " aria-hidden="true"></i>
+                                                <span>
+                                                    <t t-esc="data.nights" /> Nights </span>
+                                            </div>
+                                            <p class="card-text">This is a wider card with
+                                                supporting
+                                                text below as a natural lead-in to additional
+                                                content.
+                                                This content is a little bit longer.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <div class="mx-3 ">
+                            <h1>
+                                Tourist Information
+                            </h1>
+                            <p class="fs-3 fw-bold">
+                                Who is Traveling? :
+                            </p>
+                            <div class="grid-class fw-bold">
+                                <!-- Pregnant Women -->
+                                <div
+                                    t-att-class="state.itinerary?.pregnant_women ? 'text-success' : 'text-danger'"
+                                    class="d-flex align-items-center gap-2">
+                                    <div class="mx-3">
+                                        <i
+                                            t-att-class="state.itinerary?.pregnant_women ? 'fa fa-check' : 'fa fa-times'"
+                                            style="font-size:1.5rem" aria-hidden="true"></i>
+                                    </div>
+                                    <p class="m-0 fs-4">Pregnant Women</p>
+                                </div>
+                                <!-- Elderly People -->
+                                <div class="d-flex align-items-center gap-2"
+                                    t-att-class="state.itinerary?.elderly_people ? 'text-success' : 'text-danger'">
+                                    <div class="mx-3">
+                                        <i
+                                            t-att-class="state.itinerary?.elderly_people ? 'fa fa-check' : 'fa fa-times'"
+                                            style="font-size:1.5rem" aria-hidden="true"></i>
+                                    </div>
+                                    <p class="m-0 fs-4">Elderly People</p>
+                                </div>
+                                <!-- With Walking Difficulty -->
+                                <div
+                                    t-att-class="state.itinerary?.with_walking_difficulty ? 'text-success' : 'text-danger'"
+                                    class="d-flex align-items-center gap-2">
+                                    <div
+                                        t-att-class="state.itinerary?.with_walking_difficulty ? 'text-success' : 'text-danger'"
+                                        class="mx-3">
+                                        <i
+                                            t-att-class="state.itinerary?.with_walking_difficulty ? 'fa fa-check' : 'fa fa-times'"
+                                            style="font-size:1.5rem" aria-hidden="true"></i>
+                                    </div>
+                                    <p class="m-0 fs-4">With Walking Difficulty</p>
+                                </div>
+                                <!-- Teenager -->
+                                <div
+                                    t-att-class="state.itinerary?.teenager ? 'text-success' : 'text-danger'"
+                                    class="d-flex align-items-center gap-2">
+                                    <div
+                                        t-att-class="state.itinerary?.teenager ? 'text-success' : 'text-danger'"
+                                        class="mx-3">
+                                        <i
+                                            t-att-class="state.itinerary?.teenager ? 'fa fa-check' : 'fa fa-times'"
+                                            style="font-size:1.5rem" aria-hidden="true"></i>
+                                    </div>
+                                    <p class="m-0 fs-4">Teenager </p>
+                                </div>
+                                <!-- Women Only -->
+                                <div
+                                    t-att-class="state.itinerary?.women_only ? 'text-success' : 'text-danger'"
+                                    class="d-flex align-items-center gap-2">
+                                    <div
+                                        t-att-class="state.itinerary?.women_only ? 'text-success' : 'text-danger'"
+                                        class="mx-3">
+                                        <i
+                                            t-att-class="state.itinerary?.women_only ? 'fa fa-check' : 'fa fa-times'"
+                                            style="font-size:1.5rem" aria-hidden="true"></i>
+                                    </div>
+                                    <p class="m-0 fs-4">Women Only</p>
+                                </div>
+                                <!-- Men Only -->
+                                <div
+                                    t-att-class="state.itinerary?.men_only ? 'text-success' : 'text-danger'"
+                                    class="d-flex align-items-center gap-2">
+                                    <div
+                                        t-att-class="state.itinerary?.men_only ? 'text-success' : 'text-danger'"
+                                        class="mx-3">
+                                        <i
+                                            t-att-class="state.itinerary?.men_only ? 'fa fa-check' : 'fa fa-times'"
+                                            style="font-size:1.5rem" aria-hidden="true"></i>
+                                    </div>
+                                    <p class="m-0 fs-4">Men Only</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 px-0">
+                        <div class="card border-0 mx-3 mt-5 my-2 shadow">
+                            <div class="card-body ">
+                                <div class="card-title">
+                                    <h2 class=" fs-2 text-primary">Customer Details</h2>
+                                </div>
+                                <div class="fs-3 justify-content-between align-items-center">
+                                    <b class="fw-bold">Name: </b>
+                                    <span class="">
+                                        <t t-esc="state.itinerary.customer_name" />
+                                    </span>
+                                </div>
+                                <div class="fs-3 justify-content-between align-items-center">
+                                    <b class="fw-bold">Email: </b>
+                                    <span>
+                                        <t t-esc="state.itinerary.customer_email" />
+                                    </span>
+                                </div>
+                                <div class="fs-3 justify-content-between align-items-center">
+                                    <b class="fw-bold">Contact No.: </b>
+                                    <span>
+                                        <t t-esc="state.itinerary.customer_ph_no" />
+                                    </span>
+                                </div>
+                                <div class="fs-3 justify-content-between align-items-center">
+                                    <b class="fw-bold">Leaving From: </b>
+                                    <span>
+                                        <t t-esc="state.itinerary.leaving_from" />
+                                    </span>
+                                </div>
+                                <div class="fs-3 justify-content-between align-items-center">
+                                    <b class="fw-bold">Leaving On: </b>
+                                    <span>
+                                        <t t-esc="state.itinerary.leaving_on" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card border-0 mx-3  my-3 shadow">
+                            <div class="card-body px-4">
+                                <div class="card-title">
+                                    <h2 class=" fs-2 text-primary">Tour Information</h2>
+                                </div>
+                                <hr />
+                                <div class="d-flex flex-column mb-1">
+                                    <div class="d-flex align-items-center gap-1 ">
+                                        <div class="text-primary mx-3 ">
+                                            <i style="font-size:2rem" class="fa fa-user"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                        <div class="fs-3">
+                                            <p class="m-0">Adults</p>
+                                            <p class="m-0 fw-bold">
+                                                <t t-esc="state.itinerary.number_of_adults" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-1 ">
+                                        <div class="text-primary mx-3 ">
+                                            <i style="font-size:2rem" class="fa fa-child"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                        <div class="fs-3">
+                                            <p class="m-0">Children</p>
+                                            <p class="m-0 fw-bold">
+                                                <t t-esc="state.itinerary.number_of_children" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-1 ">
+                                        <div class="text-primary mx-3 ">
+                                            <i style="font-size:2rem" class="fa fa-building-o"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                        <div class="fs-3">
+                                            <p class="m-0">Rooms</p>
+                                            <p class="m-0 fw-bold">
+                                                <t t-esc="state.itinerary.number_of_rooms" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-1 ">
+                                        <div class="text-primary mx-3 ">
+                                            <i style="font-size:2rem" class="fa fa-star"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                        <div class="fs-3">
+                                            <p class="m-0">Hotel Rating</p>
+                                            <p class="m-0 fw-bold">
+                                                <t t-esc="state.itinerary.star_rating" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-1 ">
+                                        <div class="text-primary mx-3 ">
+                                            <t t-if="state.itinerary.add_transfers">
+                                                <i style="font-size:2rem" class="fa fa-check"
+                                                    aria-hidden="true"></i>
+                                            </t>
+                                            <t t-else="">
+                                                <i style="font-size:2rem"
+                                                    class="fa fa-times text-danger"
+                                                    aria-hidden="true"></i>
+                                            </t>
+                                        </div>
+                                        <div class="fs-3">
+                                            <p class="m-0">Transfer</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="stepper-content" t-att-class="state.current_step == 2 ? 'active' : ''">
+                <t t-foreach="state.itinerary.city_nights" t-as="city" t-key="city.id">
+                    <t t-foreach="city.hotels" t-as="hotel" t-key="hotel.id">
+                        <div class="card shadow mx-5 my-2 px-3 py-3">
+                            <h1 class=""> Stay In <t t-esc="city.city_name" />
+                            </h1>
+                            <hr class="my-2" />
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img t-att-src="'data:image/jpeg;base64,'+hotel.hotel_img"
+                                        class="img-fluid rounded"
+                                        style="height: 100%;object-fit: cover;" alt="..." />
+                                </div>
+                                <div class="col-md-8 ">
+                                    <div class="card-body px-3 pt-1">
+                                        <div class="card-title">
+                                            <h1 class="mb-0  text-primary">
+                                                <t t-esc="hotel.hotel_name" />
+                                                <small class="px-2">
+                                                    <t t-foreach="hotel.star_icon" t-as="i"
+                                                        t-key="i">
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                    </t>
+                                                </small>
+                                            </h1>
+                                            <p class="mb-0">
+                                                <t t-esc="hotel.address" />
+                                            </p>
+                                        </div>
+                                        <div class="fw-bold fs-3">
+                                            <i class="fa fa-moon-o " aria-hidden="true"></i>
+                                            <span>
+                                                <t t-esc="city.nights" /> Nights </span>
+                                        </div>
+                                        <div class="row fs-4">
+                                            <div class="col-12  d-flex">
+                                                <strong class="mr-2 fw-bold">Selected Room: </strong>
+                                                <p class="mb-1">
+                                                    <t t-esc="hotel.room_name" />
+                                                </p>
+                                            </div>
+                                            <div class="col-12  d-flex">
+                                                <strong class="mr-2 fw-bold">Selected Meal: </strong>
+                                                <p class="mb-1">
+                                                    <t t-esc="hotel.meal_plans" />
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <div>
+                                                    <strong>Check-In Date:</strong>
+                                                    <p class="m-0">
+                                                        <t t-esc="hotel.check_in_date" />
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div>
+                                                    <strong>Check-Out Date:</strong>
+                                                    <p class="m-0">
+                                                        <t t-esc="hotel.check_out_date" />
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex mt-1 justify-content-end">
+                                            <button class="btn mx-1 btn-primary"
+                                                t-on-click="()=>openSelectHotelModel(hotel.hotel_id,hotel.id)">
+                                                Change Room
+                                            </button>
+                                            <button class="btn mx-1 btn-primary"
+                                                t-on-click="()=>openHotelModel(city.city_id,hotel.id)">
+                                                Change Hotels
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </div>
+            <!-- road transport -->
+
+            <div class="stepper-content" t-att-class="state.current_step == 3 ? 'active' : ''">
+                <div class="card shadow mx-5 my-2 px-3 py-3">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h1 class="">Road Transport</h1>
+                        </div>
+
+                        <form>
+                            <div class="row">
+                                <div class="col-12 col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label for="pickup_from">From</label>
+                                        <select class="form-select" name="pickup_from_id"
+                                            id="pickup_from"
+                                            t-model="selectedRTO.pickup_from_id">
+                                            <t t-foreach="state.cities" t-as="city" t-key="city.id">
+                                                <option t-att-value="city.id">
+                                                    <t t-esc="city.name" />
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label for="destination_id">To</label>
+                                        <select class="form-select" name="destination_id"
+                                            id="destination_id"
+                                            t-model="selectedRTO.destination_id">
+                                            <t t-foreach="state.cities" t-as="city" t-key="city.id">
+                                                <option t-att-value="city.id">
+                                                    <t t-esc="city.name" />
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label>Select Vehicle</label>
+                                        <select class="form-select" name="road_transport_id"
+                                            t-model="selectedRTO.road_transport_id">
+                                            <t t-foreach="state.road_transport_options" t-as="rto"
+                                                t-key="rto.id">
+                                                <option t-att-value="rto.id">
+                                                    <t t-esc="rto.vehicle_type" /> - <t
+                                                        t-esc="rto.seats" />
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div>
+                            <button class="btn btn-primary mt-3" t-on-click="onSubmitRT">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stepper-content" t-att-class="state.current_step == 4 ? 'active' : ''">
+                <div class="card shadow mx-5 my-2 px-3 py-3">
+                    <div class="card-body">
+                        <div class="card-title w-100">
+                            <div
+                                class="d-flex  flex-md-row flex-column justify-content-between align-items-center">
+
+                                <div class="w-100">
+
+                                    <h3 class="" style="color:#343a40">Discover Your Tour Plan</h3>
+                                    <p class="m-0">
+                                        <i class="fa fa-map-marker " aria-hidden="true"></i>
+                                        <span class="px-1">
+                                            <t t-esc="state.itinerary.leaving_from" />
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="d-flex w-100 justify-content-center gap-1"
+                                    style="align-items:flex-start">
+                                    <div class="d-flex p-3  ">
+
+                                        <i class="fa fa-user text-primary " style="font-size:2rem"
+                                            aria-hidden="true"></i>
+                                        <div class="d-flex flex-column px-2">
+                                            <span class="">No of Person</span>
+                                            <span class="fw-bold ">
+                                                <t t-esc="state.itinerary.number_of_adults" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex p-3">
+
+                                        <i class="fa fa-clock-o text-primary "
+                                            style="font-size:2rem" aria-hidden="true"></i>
+                                        <div class="d-flex flex-column px-2">
+                                            <span class="">
+                                                Duration</span>
+                                            <span class="fw-bold "><t
+                                                    t-esc="state.itinerary.total_nights+1" /> Days</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex p-3">
+                                        <i class="fa fa-car text-primary " style="font-size:2rem"
+                                            aria-hidden="true"></i>
+                                        <div class="d-flex flex-column px-2">
+                                            <span class="">Leaving from</span>
+                                            <span class="fw-bold ">
+                                                <t t-esc="state.itinerary.leaving_from" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <hr class="mt-1 mb-1" />
+                        <div class="row">
+                            <div class="col-12 col-sm-9">
+                                <t t-set="index" t-value="0" />
+                                <t t-foreach="state.itinerary.city_nights" t-as="city"
+                                    t-key="city.id">
+                                    <t t-foreach="city.itinerary" t-as="itiner" t-key="index">
+
+                                        <t t-set="index" t-value="index+1" />
+                                        <div class="card shadow my-2">
+                                            <div class="card-body">
+                                                <div class="d-flex">
+                                                    <h3 class="">Day <t t-esc="index" /></h3>
+                                                    <span>, <t t-esc="itiner.days" /></span>
+                                                </div>
+                                                <div>
+                                                    <!-- <t t-set="act_index" t-value="0"/>
+                                                    <ul class="d-flex gap-2 rounded px-2 py-2 fs-5 list-style-none bg-primary text-white">
+                                                    <t t-foreach="itiner.activity" t-as="act" t-key="act.id">
+                                                    <t t-set="act_index" t-value="act_index+1"/>
+                                                        
+                                                        <li>Activity <t t-esc="act_index"/></li>
+                                                    </t>
+                                                       
+                                                    </ul> -->
+                                                    <t t-set="act_index" t-value="0" />
+                                                    <!-- Tab Navigation -->
+                                                    <ul class="nav nav-tabs"
+                                                        t-att-id="'activityTabs-'+index"
+                                                        role="tablist">
+                                                        <t t-foreach="itiner.activity" t-as="act"
+                                                            t-key="act.id">
+                                                            <t t-set="act_index"
+                                                                t-value="act_index+1" />
+                                                            <li class="nav-item" role="presentation">
+                                                                <a
+                                                                    t-att-class="act_index == 1 ? 'active nav-link' : 'nav-link'"
+                                                                    t-att-id="'activity-tab-'+index+'-'+act_index"
+                                                                    data-bs-toggle="tab"
+                                                                    t-att-href="'#activity-'+index+'-'+act_index"
+                                                                    role="tab"
+                                                                    t-att-aria-controls="'activity-'+index+'-'+act_index"
+                                                                    aria-selected="true"> Activity <t
+                                                                        t-esc="act_index" />
+                                                                </a>
+                                                            </li>
+                                                        </t>
+                                                    </ul>
+                                                </div>
+
+                                                <!-- Tab Content -->
+                                                <div class="tab-content bg-light py-3 px-2"
+                                                    t-att-id="'activityTabContent-'+index">
+                                                    <t t-set="act_index" t-value="0" />
+                                                    <t t-foreach="itiner.activity" t-as="act"
+                                                        t-key="act.id">
+                                                        <t t-set="act_index" t-value="act_index + 1" />
+                                                        <div
+                                                            t-att-class="act_index == 1 ? 'show active tab-pane fade' : 'tab-pane fade'"
+                                                            t-att-id="'activity-'+index+'-'+act_index"
+                                                            role="tabpanel"
+                                                            t-att-aria-labelledby="'activity-tab-'+index+'-'+act_index">
+                                                            <div
+                                                                class="d-flex justify-content-between align-items-center">
+                                                                <h4>
+                                                                    <t t-esc="act.activity_name" />
+                                                                </h4>
+                                                                <div
+                                                                    class="d-flex align-items-center gap-2"
+                                                                    style="justify-content:flex-end">
+                                                                    <button
+                                                                        class="btn btn-primary rounded-circle"
+                                                                        t-on-click="()=>openEditActivity(act)">
+                                                                        <i
+                                                                            class="fa fa-pencil-square-o"
+                                                                            aria-hidden="true"></i>
+                                                                    </button>
+                                                                    <button
+                                                                        class="btn btn-outline-primary rounded-circle"
+                                                                        t-on-click="()=>openChangeActivity(itiner, city.city_id)">
+                                                                        <i
+                                                                            class="fa fa-external-link"
+                                                                            aria-hidden="true"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <p class="mt-2 mb-0 text-ellipsis fs-6">
+                                                                <t t-esc="act.activity_desc" />
+                                                            </p>
+                                                        </div>
+                                                    </t>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </t>
+                                </t>
+                            </div>
+                            <div class="col-12 col-sm-4">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="navigation-buttons mx-3 my-2">
+                <button t-on-click="()=>previous_step()" t-att-disabled="state.current_step == 1"
+                    class="btn btn-secondary">Previous</button>
+                <button t-on-click="()=>next_step()" t-att-disabled="state.current_step == 4"
+                    class="btn btn-primary">Next</button>
+            </div>
+        </div>
+
+        <!-- Edit Activity Modal -->
+        <t t-if="state.isEditActivityModelOpen">
+            <div class="modal fade show" tabindex="-1" role="dialog" style="display: block;">
+                <div class="modal-dialog" style="max-width: 90%;" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Edit Activity</h3>
+                            <button type="button" class="btn-close" aria-label="Close"
+                                t-on-click="()=>closeEditActivity()">
+                                <!-- <i aria-hidden="true" class="fa fa-times"></i> -->
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <!-- Activity Name -->
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label class="form-label" for="act_id">Activity Name</label>
+                                            <input type="text" id="act_id" class="form-control"
+                                                t-model="activity.activity_name" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <!-- Age Limit -->
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="age_limit">Age Limit</label>
+                                            <input type="number" id="age_limit" class="form-control"
+                                                t-model="activity.age_limit" />
+                                        </div>
+                                    </div>
+
+                                    <!-- Duration -->
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="duration">Duration</label>
+                                            <input type="text" id="duration" class="form-control"
+                                                t-model="activity.duration" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label class="form-label" for="Description">Description</label>
+                                            <textarea id="Description" class="form-control" rows="4"
+                                                t-model="activity.activity_desc"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="mx-1 btn btn-secondary"
+                                t-on-click="()=>closeEditActivity()">Close</button>
+                            <button type="button" class="mx-1 btn btn-primary"
+                                t-on-click="()=>saveActivity()">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+        <!-- change activity -->
+        <t t-if="state.isChangeActivityModelOpen">
+            <div class="modal fade show" tabindex="-1" role="dialog" style="display: block;">
+                <div class="modal-dialog" style="max-width: 90%;" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Change Activity</h3>
+                            <button type="button" class="btn-close" aria-label="Close"
+                                t-on-click="()=>closeChangeActivity()">
+                                <!-- <i aria-hidden="true" class="fa fa-times"></i> -->
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row ">
+                                <t t-foreach="activities" t-as="act" t-key="act.id">
+
+                                    <div class="col-12 my-2 col-sm-6">
+                                        <div class="card ">
+                                            <div class="card-body">
+                                                <div class="card-title">
+                                                    <h3 class="">
+                                                        <t t-esc="act.activity_name" />
+                                                    </h3>
+                                                </div>
+                                                <p class="text-ellipsis fs-6">
+                                                    <t t-esc="act.activity_desc" />
+                                                </p>
+                                                <ul class="">
+                                                    <li>
+                                                        <p class="m-0">Duration : <t
+                                                                t-esc="act.duration?act.duration:'-'" /></p>
+                                                    </li>
+                                                    <li>
+                                                        <p class="m-0">Age Limit : <t
+                                                                t-esc="act.age_limit?act.age_limit:'-'" /></p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="card-footer">
+                                                <button class="btn btn-primary"
+                                                    t-on-click="()=>onSelectedActivity(act)">
+                                                    Select
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                            <h2 class="">Selected Activites</h2>
+                            <div class="row">
+                                <t t-set="i" t-value="0" />
+                                <t t-foreach="selectedActivity" t-as="act" t-key="i">
+                                    <t t-set="i" t-value="i+1" />
+
+                                    <div class="col-12 my-2 col-sm-6">
+                                        <div class="card ">
+                                            <div class="card-body">
+                                                <div
+                                                    class="card-title d-flex align-items-center justify-content-between">
+                                                    <h3 class="">
+                                                        <t t-esc="act.activity_name" />
+                                                    </h3>
+                                                    <span
+                                                        class="badge bg-success px-2 d-flex justify-content-center align-items-center text-white py-1">
+                                                        Selected</span>
+                                                </div>
+                                                <p class="text-ellipsis fs-6">
+                                                    <t t-esc="act.activity_desc" />
+                                                </p>
+                                                <ul class="">
+                                                    <li>
+                                                        <p class="m-0">Duration : <t
+                                                                t-esc="act.duration" /></p>
+                                                    </li>
+                                                    <li>
+                                                        <p class="m-0">Age Limit : <t
+                                                                t-esc="act.age_limit" /></p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="mx-1 btn btn-secondary"
+                                t-on-click="()=>closeEditActivity()">Close</button>
+                            <button type="button" class="mx-1 btn btn-primary"
+                                t-on-click="()=>saveChangeActivity()">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+        <!-- Edit Itinerary -->
+        <t t-if="state.isModelOpen">
+            <div class="modal fade show" tabindex="-1" role="dialog" style="display: block;">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Itinerary</h5>
+                            <button type="button" class="btn" aria-label="Close"
+                                t-on-click="()=>closeForm()">
+                                <i aria-hidden="true" class="fa fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <h4 class="">
+                                            DESTINATIONS
+                                        </h4>
+                                        <p class="mb-1">Enter the cities below in the order in which
+                                            they will be
+                                            visited for the itinerary:</p>
+                                        <button class="btn btn-primary" type="button"
+                                            t-on-click="()=>addDestination()">
+                                            Add Destination
+                                        </button>
+                                        <t t-set="index" t-value="0"/>
+                                        <t t-foreach="state.itinerary.destinations" t-as="destination" t-key="index">
+                                        <t t-set="index" t-value="index+1"/>
+                                          
+                                          <div class="row align-items-center  mx-1 px-2 my-2 position-relative border border-primary rounded">
+                                              <div class="col-6 px-1 py-2 ">
+                                                <!-- <label for="city">City</label> -->
+                                                <AutoComplete label="'City'" value="destination.city.name"  options="state.Options" placeholder="'Typing a City'" onchange="onChangeCityInput" onSelect="onClickCitySelect" row_id="destination.row_id"/>
+                                                 
+                                                 
+                                              </div>
+                                              <div class="col-4 px-1 py-2 form-group">
+                                                  <label for="nights">Nights</label>
+                                                  <select class="form-select" id="nights" t-model="destination.nights">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                  </select> 
+                                                  
+                                              </div>
+                                              <div class="col-2 d-flex justify-content-center px-1">
+                                                <button class="btn btn-danger rounded-circle" t-on-click="()=>deleteDestination(destination.row_id)">
+                                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </button>
+                                              </div>
+                                          </div>
+                                      </t>
+                                    </div>
+                                    <div class="col-12  col-md-6">
+                                        <div class="form-group">
+                                          <label for="package_name">Package Name</label>
+                                          <input type="text" id="package_name" class="form-control"
+                                            t-model="state.itinerary.package_name" />
+                                        </div>
+                                        <div class="form-group">
+                                          <AutoComplete label="'Customer'" value="state.itinerary.customer_name"  options="state.CustomerOptions" placeholder="'Typing a Customer'" onchange="onChangeCustomerInput" onSelect="onClickCustomerSelect" />
+                                         
+                                        </div>
+                                        <div class="form-group">
+                                          <AutoComplete label="'Leaving From'" value="state.itinerary.leaving_from"  options="state.leavingfromOptions" placeholder="'Typing a Leaving From'" onchange="onChangeLeavingfromInput" onSelect="onClickLeavingfromSelect" />
+                                         
+                                       
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="nationality_id">Nationality</label>
+                                          <select class="form-select" id="nationality_id"
+                                            t-model="state.itinerary.nationality_id">
+                                            <option value="">Select Nationality</option>
+                                            <t t-foreach="state.nationalities" t-as="country" t-key="country.id">
+                                              <option t-att-value="country.id" t-esc="country.nationality" />
+                                            </t>
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="leaving_on">Leaving On</label>
+                                          <input type="date" id="leaving_on" class="form-control"
+                                            t-model="state.itinerary.leaving_on" />
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="number_of_rooms">Number of Rooms</label>
+                                          <input type="number" id="number_of_rooms" class="form-control"
+                                            t-model="state.itinerary.number_of_rooms" />
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="number_of_adults">Number of Adults</label>
+                                          <input type="number" id="number_of_adults" class="form-control"
+                                            t-model="state.itinerary.number_of_adults" />
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="number_of_children">Number of Children</label>
+                                          <input type="number" id="number_of_children" class="form-control"
+                                            t-model="state.itinerary.number_of_children" />
+                                        </div>
+                    
+                                        <div class="form-group">
+                                          <label for="interests">Interests</label>
+                                          <select class="form-select" id="interests"
+                                            t-model="state.itinerary.interests">
+                                            <option value="">Select Interests</option>
+                                            <option value="honeymoon">Honeymoon</option>
+                                            <option value="luxury">Luxury</option>
+                                            <option value="leisure">Leisure</option>
+                                            <option value="spa">Spa</option>
+                                            <option value="history">History</option>
+                                            <option value="art_and_culture">Art and Culture</option>
+                                            <option value="adventure">Adventure</option>
+                                            <option value="shopping">Shopping</option>
+                                            <option value="entertainment">Entertainment</option>
+                                            <option value="nightlife">Nightlife</option>
+                                          </select>
+                                        </div>
+                    
+                                        <div class="form-group">
+                                          <label for="who_is_travelling">Who is Travelling</label>
+                                          <!-- <input type="text" id="who_is_travelling" class="form-control"
+                                          t-model="state.itinerary.who_is_travelling" /> -->
+                                          <select class="form-select" id="who_is_travelling"
+                                            t-model="state.itinerary.who_is_travelling">
+                                            <option value="">Select Who is Travelling</option>
+                                            <option value="couple">Couple</option>
+                                            <option value="family">Family</option>
+                                            <option value="friends">Friends</option>
+                    
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Additional Details</label>
+                                          <div class="form-check">
+                                            <input type="checkbox" id="pregnant_women" class="form-check-input"
+                                              t-model="state.itinerary.pregnant_women" />
+                                            <label class="form-check-label" for="pregnant_women">Pregnant Women</label>
+                                          </div>
+                                          <div class="form-check">
+                                            <input type="checkbox" id="elderly_people" class="form-check-input"
+                                              t-model="state.itinerary.elderly_people" />
+                                            <label class="form-check-label" for="elderly_people">Elderly People</label>
+                                          </div>
+                                          <div class="form-check">
+                                            <input type="checkbox" id="with_walking_difficulty" class="form-check-input"
+                                              t-model="state.itinerary.with_walking_difficulty" />
+                                            <label class="form-check-label" for="with_walking_difficulty">With Walking
+                                              Difficulty</label>
+                                          </div>
+                                          <div class="form-check">
+                                            <input type="checkbox" id="teenager" class="form-check-input"
+                                              t-model="state.itinerary.teenager" />
+                                            <label class="form-check-label" for="teenager">Teenager</label>
+                                          </div>
+                                          <div class="form-check">
+                                            <input type="checkbox" id="women_only" class="form-check-input"
+                                              t-model="state.itinerary.women_only" />
+                                            <label class="form-check-label" for="women_only">Women Only</label>
+                                          </div>
+                                          <div class="form-check">
+                                            <input type="checkbox" id="men_only" class="form-check-input"
+                                              t-model="state.itinerary.men_only" />
+                                            <label class="form-check-label" for="men_only">Men Only</label>
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="star_rating">Star Rating</label>
+                                          <select class="form-select" id="star_rating"
+                                            t-model="state.itinerary.star_rating">
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="add_transfers">Add Transfers</label>
+                                          <input type="checkbox" id="add_transfers" class="form-check-input mx-1"
+                                            t-model="state.itinerary.add_transfers" />
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="add_tours_and_travels">Add Tours and Travels</label>
+                                          <input type="checkbox" id="add_tours_and_travels"
+                                            class="form-check-input mx-1"
+                                            t-model="state.itinerary.add_tours_and_travels" />
+                                        </div>
+                    
+                                      </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <footer>
+                              <button type="button" class="mx-1 btn btn-primary" t-on-click="()=>saveItinerary()">Save</button>
+              
+                              <button type="button" class="mx-1 btn btn-secondary" t-on-click="()=>closeForm()">
+                                Cancel</button>
+                            </footer>
+              
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+        <!-- hotel model -->
+        <t t-if="state.isHotelModelOpen">
+            <div class="modal fade show" tabindex="-1" role="dialog" style="display: block;">
+                <div class="modal-dialog " style="max-width:90%" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Select Hotel</h5>
+                            <button type="button" class="btn" aria-label="Close"
+                                t-on-click="()=>closeHotelModel()">
+                                <i aria-hidden="true" class="fa fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <t t-foreach="allhotels" t-as="hotel" t-key="hotel.id">
+                                <div class="card shadow ">
+                                    <div class="row align-items-center g-0">
+                                        <div class="col-md-4">
+                                            <img t-att-src="'data:image/jpeg;base64,'+hotel.img"
+                                                class="img-fluid rounded"
+                                                style="height: 100%;object-fit: cover;" alt="..." />
+                                        </div>
+                                        <div class="col-md-8 ">
+                                            <div class="card-body px-3 pt-1">
+                                                <div class="card-title">
+                                                    <div
+                                                        class="d-flex justify-content-between align-items-center">
+                                                        <h1 class="mb-0  text-primary">
+                                                            <t t-esc="hotel.name" />
+                                                            <small class="px-2">
+                                                                <t t-foreach="hotel.star_icon"
+                                                                    t-as="i" t-key="i">
+                                                                    <i class="fa fa-star"
+                                                                        aria-hidden="true"></i>
+                                                                </t>
+                                                            </small>
+                                                        </h1>
+                                                        <div class="review_count">
+                                                            <t t-esc="hotel.rate" /> (<t
+                                                                t-esc="hotel.review_count" />) </div>
+                                                    </div>
+                                                    <p class="mb-0">
+                                                        <t t-esc="hotel.address" />
+                                                    </p>
+                                                    <div class="text-primary fs-3">
+                                                        <i class="fa fa-map-marker"
+                                                            aria-hidden="true"></i>
+                                                        <span>
+                                                            <t t-esc="hotel.city" />
+                                                        </span>
+                                                    </div>
+                                                    <div class="row fs-4">
+                                                        <div class="col-12  d-flex">
+                                                            <strong class="mr-2  fw-bold">Room: </strong>
+                                                            <p class="mb-1">
+                                                                <t t-esc="hotel.room_name" />
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex mt-1 justify-content-end">
+                                                    <button class="btn mx-1 btn-primary"
+                                                        t-on-click="()=>openSelectHotelModel(hotel.id,state.current_hotel_detail_id)">
+                                                        Select Hotel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+        <!-- Hotel selected -->
+        <t t-if="state.isHotelSelectModelOpen">
+            <div class="modal fade show" tabindex="-1" role="dialog" style="display: block;">
+                <div class="modal-dialog modal-xl" style="max-width:80%" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">
+                                <t t-esc="hotel?.name" />
+                            </h3>
+                            <button type="button" class="btn" aria-label="Close"
+                                t-on-click="()=>closeSeleteHotelModel()">
+                                <i aria-hidden="true" class="fa fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div id="carouselExample" class="carousel  slide w-100">
+                                <div class="carousel-inner">
+                                    <t t-set="index" t-value="0" />
+                                    <t t-foreach="hotel.hotel_imgs" t-as="img" t-key="img.id">
+                                        <t t-set="index" t-value="index + 1" />
+                                        <div
+                                            t-att-class="'carousel-item ' + ( index == 1 ? 'active' : '')">
+                                            <img t-att-src="'data:image/jpeg;base64,'+img.image"
+                                                class="d-block w-100" style="max-height:387px;"
+                                                alt="..." />
+                                        </div>
+                                    </t>
+                                </div>
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExample" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExample" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                            <div class="row pt-4 px-2 ">
+                                <div class="col-12 col-md-8">
+                                    <h3 class="">
+                                        About Hotel
+                                    </h3>
+                                    <p class="text-justify">
+                                        <t t-esc="hotel.desc" />
+                                    </p>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="">
+                                        <h3 class="">
+                                            Hotel Rating
+                                        </h3>
+                                        <t t-foreach="hotel.star_icon" t-as="i" t-key="i">
+                                            <i
+                                                style="color:#efd211; font-size:1.5rem;margin-right:.5rem"
+                                                class="fa fa-star " aria-hidden="true"></i>
+                                        </t>
+
+                                    </div>
+                                    <div class="mt-1">
+                                        <iframe
+                                            width="100%"
+                                            height="200"
+                                            t-att-src="'//maps.google.com/maps?q=' + hotel.name + ',&amp;z=15&amp;output=embed'">
+                                        </iframe>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="">
+                                <h3 class="">Rooms Details</h3>
+                                <div class="accordion" id="accordionRoom">
+                                    <t t-set="room_index" t-value="0" />
+
+                                    <t t-foreach="hotel.room_categories" t-as="room_cat"
+                                        t-key="room_cat.id">
+                                        <t t-set="room_index" t-value="room_index+1" />
+
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header room-accordion-header">
+                                                <button class="accordion-button fw-bold"
+                                                    type="button" data-bs-toggle="collapse"
+                                                    t-att-data-bs-target="'#collapse' + room_cat.id"
+                                                    t-att-aria-controls="'collapse' + room_cat.id">
+                                                    <t t-esc="room_cat.name" />
+                                                </button>
+                                            </h2>
+
+                                            <div t-att-id="'collapse' + room_cat.id"
+                                                class="accordion-collapse collapse"
+                                                t-att-class="room_cat?.id==current_hotel_detail?.category[0] ?  'show':'' "
+                                                data-bs-parent="#accordionRoom">
+                                                <div class="accordion-body">
+                                                    <div class="">
+                                                        <ul class="p-0 grid-col-2 list-style-none">
+                                                            <!-- Initialize the room_cat_index to 0 -->
+                                                            <t t-set="room_cat_index" t-value="0" />
+
+                                                            <t t-foreach="room_cat.rooms"
+                                                                t-as="room" t-key="room.id">
+                                                                <!-- Increment the index -->
+                                                                <t t-set="room_cat_index"
+                                                                    t-value="room_cat_index + 1" />
+
+                                                                <li>
+                                                                    <div class="form-check-inline">
+                                                                        <!-- The first room in each
+                                                                        category will have the
+                                                                        'checked' attribute -->
+                                                                        <t
+                                                                            t-if="room.id==current_hotel_detail?.room_id[0]">
+                                                                            <input
+                                                                                class="form-check-input mx-2"
+                                                                                type="radio"
+                                                                                t-att-name="'selected_room'+ room_cat.id"
+                                                                                t-att-checked="room.id==current_hotel_detail.room_id[0]"
+                                                                                t-att-id="'room_' + room.id + '_' + room_cat.id"
+                                                                                t-att-value="room.id" />
+
+                                                                            <label
+                                                                                class="form-check-label"
+                                                                                t-att-for="'room_' + room.id + '_' + room_cat.id">
+                                                                                <t t-esc="room.rnm" />
+                                                                            </label>
+                                                                        </t>
+
+                                                                        <t t-else="">
+                                                                            <input
+                                                                                class="form-check-input mx-2"
+                                                                                type="radio"
+                                                                                t-att-name="'selected_room'+ room_cat.id"
+                                                                                t-att-checked="room_cat_index == 1"
+                                                                                t-att-id="'room_' + room.id + '_' + room_cat.id"
+                                                                                t-att-value="room.id" />
+
+                                                                            <label
+                                                                                class="form-check-label"
+                                                                                t-att-for="'room_' + room.id + '_' + room_cat.id">
+                                                                                <t t-esc="room.rnm" />
+                                                                            </label>
+                                                                        </t>
+                                                                    </div>
+                                                                </li>
+                                                            </t>
+                                                        </ul>
+                                                    </div>
+                                                    <div
+                                                        class="row justify-content-center align-items-center">
+                                                        <div class="col">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    t-att-for="'meal_plan_' + room_cat.id"
+                                                                    class="form-label">Select Meal
+                                                                    Plan</label>
+                                                                <t
+                                                                    t-if="room_cat?.id==current_hotel_detail?.category[0]">
+                                                                    <select
+                                                                        t-att-id="'meal_plan_' + room_cat.id"
+                                                                        class="form-select">
+                                                                        <option
+                                                                            value="No Meals Included"
+                                                                            t-att-selected="current_hotel_detail.meal_plans=='No Meals Included'">No
+                                                                            Meals Included</option>
+                                                                        <option
+                                                                            value="Meal included - Breakfast"
+                                                                            t-att-selected="current_hotel_detail.meal_plans=='Meal included - Breakfast'">Meal
+                                                                            included - Breakfast</option>
+                                                                        <option
+                                                                            value="Meal included - Breakfast, Dinner"
+                                                                            t-att-selected="current_hotel_detail.meal_plans=='Meal included - Breakfast, Dinner'">Meal
+                                                                            included - Breakfast,
+                                                                            Dinner</option>
+                                                                    </select>
+                                                                </t>
+
+                                                                <t t-else="">
+                                                                    <select
+                                                                        t-att-id="'meal_plan_' + room_cat.id"
+                                                                        class="form-select">
+                                                                        <option
+                                                                            value="No Meals Included"
+                                                                            t-att-selected="">No
+                                                                            Meals Included</option>
+                                                                        <option
+                                                                            value="Meal included - Breakfast">Meal
+                                                                            included - Breakfast</option>
+                                                                        <option
+                                                                            value="Meal included - Breakfast, Dinner">Meal
+                                                                            included - Breakfast,
+                                                                            Dinner</option>
+                                                                    </select>
+                                                                </t>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="form-group">
+                                                                <label
+                                                                    t-att-for="'additional_request_' + room_cat.id"
+                                                                    class="form-label">Additional
+                                                                    Request</label>
+                                                                <t
+                                                                    t-if="room_cat?.id==current_hotel_detail?.category[0]">
+
+                                                                    <textarea
+                                                                        t-att-id="'additional_request_' + room_cat.id"
+                                                                        t-att-value="current_hotel_detail.additional_requests"
+                                                                        class="form-control"
+                                                                        rows="3" cols="5"></textarea>
+                                                                </t>
+
+                                                                <t t-else="">
+                                                                    <textarea
+                                                                        t-att-id="'additional_request_' + room_cat.id"
+                                                                        class="form-control"
+                                                                        rows="3" cols="5"></textarea>
+
+                                                                </t>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col inline align-text-bottom">
+                                                            <button
+                                                                t-on-click="()=>updateRoom(room_cat.id)"
+                                                                class="btn btn-primary">
+                                                                Select
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- <div t-att-id="'collapse' + room_cat.id"
+                                            class="accordion-collapse collapse "
+                                            t-att-class="room_index==1 ? 'show':'' "
+                                            data-bs-parent="#accordionRoom">
+                                                <div class="accordion-body">
+                                                    <div class="">
+                                                        <ul class="p-0 grid-col-2 list-style-none">
+                                                            <t t-set="room_cat_index" t-value="0"/>
+                                                            <t t-foreach="room_cat.rooms" t-as="room" t-key="room.id">
+                                                                <t t-set="index" t-value="room_cat_index + 1"/>
+                                                                <li>
+                                                                    <div class="form-check-inline">
+                                                                        <input class="form-check-input mx-2" type="radio" 
+                                                                               name="selected_room" 
+                                                                               t-att-checked="index == 1"  
+                                                                               t-att-id="'room_' + room.id+'_'+room_cat.id" 
+                                                                               t-att-value="room.id"/>
+                                                                        <label class="form-check-label" t-att-for="'room_' + room.id+'_'+room_cat.id">
+                                                                            <t t-esc="room.rnm"/>
+                                                                        </label>
+                                                                    </div>
+                                                                </li>
+                                                            </t>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="row justify-content-center align-items-center">
+                                                        <div class="col">
+                                                            <div class="form-group">
+                                                                <label t-att-for="'meal_plan_' + room_cat.id" class="form-label">Select Meal Plan</label>
+                                                                <select t-att-id="'meal_plan_' + room_cat.id" class="form-select">
+                                                                 
+                                                                    <option value="No Meals Included">No Meals Included</option>
+                                                                    <option value="Meal included - Breakfast">Meal included - Breakfast</option>
+                                                                    <option value="Meal included - Breakfast, Dinner">Meal included - Breakfast, Dinner</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="form-group">
+                                                                <label t-att-for="'additional_request_' + room_cat.id" class="form-label">Additional
+                                            Request</label>
+                                                                <textarea t-att-id="'additional_request_' + room_cat.id" class="form-control" rows="3"
+                                            cols="5"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col inline align-text-bottom">
+                                                            <button t-on-click="()=>updateRoom(room_cat.id)" class="btn btn-primary">
+                                                                Select
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- <div class="">
+                                <h3 class="">Rooms Details</h3>
+                                <div class="accordion" id="accordionRoom">
+                                    <t t-foreach="hotel.room_categories" t-as="room_cat" t-key="room_cat.id">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header room-accordion-header">
+                                                <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" 
+                                                        t-att-data-bs-target="'#collapse' + room_cat.id" 
+                                                        t-att-aria-controls="'collapse' + room_cat.id">
+                                                    <t t-esc="room_cat.name"/>
+                                                </button>
+                                            </h2>
+                                            <div t-att-id="'collapse' + room_cat.id" class="accordion-collapse collapse show"
+                            data-bs-parent="#accordionRoom">
+                                                <div class="accordion-body">
+
+                                                   <div class="">
+                                                       <t t-set="index" t-value="0"/>
+                                                       <ul class="p-0 grid-col-2 list-style-none">
+                                                    <t t-foreach="room_cat.rooms" t-as="room" t-key="room.id">
+                                                        <t t-set="index" t-value="index +1"/>
+                                                            <li>
+
+                                                                <div class="form-check-inline">
+                                                                    <input class="form-check-input mx-2" type="radio" name="exampleRadios" t-att-checked="index==1"
+                            t-att-id="'room_'+room.id" value="option2"/>
+                                                                    <label class="form-check-label" t-att-for="'room_'+room.id">
+                                                                        <t t-esc="room.rnm"/>
+                                                                    </label>
+                                                                  </div>
+                                                            </li>
+                                                            
+                                                        </t>
+                                                    </ul>
+                                                   </div>
+                                                   <div class="row justify-content-center align-items-center">
+                                                    <div class="col">
+                                                        
+                                                        <div class="form-group">
+                                                            <label  class="form-label">Select Meal Plan</label>
+                                                            <select class="form-select">
+                                                                <option t-att-disabled='true' selected="true"></option>
+                                                                <option value="No Meals Included">No Meals Included</option>
+                                                                <option value="Meal included - Breakfast">Meal included - Breakfast</option>
+                                                                <option value="Meal included - Breakfast, Dinner">Meal included - Breakfast, Dinner</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        
+                                                        <div class="form-group">
+                                                            <label t-att-for="'room_'+ room_cat.id" class="form-label">Additional Request</label>
+                                                            <textarea t-att-id="'room_'+ room_cat.id" class="form-control"  rows="3" cols="5"> 
+
+                                                            </textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col  inline align-text-bottom">
+
+                                                        <button t-on-click="()=>updateRoom()" class="btn btn-primary ">
+                                                            Select 
+                                                        </button>
+                                                    </div>
+                                                   </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                                
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+
+    </t>
+</template>

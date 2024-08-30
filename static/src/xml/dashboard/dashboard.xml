@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+
+    <t t-name="dashboard_template">
+        <style>
+            .o_control_panel {
+            display: none;
+            }
+        </style>
+        <div class="container-fluid wrap">
+            <div class="selection_cards">
+                <div class="row my-5">
+                  <h2>
+                    Dashboard
+                  </h2>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

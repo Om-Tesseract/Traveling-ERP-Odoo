@@ -1,0 +1,59 @@
+<odoo>
+    <!-- Hotel Tree View -->
+    <record id="view_hotel_tree" model="ir.ui.view">
+        <field name="name">hotel.tree</field>
+        <field name="model">hotel</field>
+        <field name="arch" type="xml">
+            <tree string="Hotels">
+                <field name="name"/>
+                <field name="address"/>
+                <field name="area"/>
+                <field name="star_rating"/>
+                <field name="rate"/>
+                <field name="review_count"/>
+                <field name="city_id"/>
+                <field name="cleanliness_rate"/>
+                <field name="service_rate"/>
+                <field name="comfort_rate"/>
+                <field name="amenities_rate"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Hotel Form View -->
+    <record id="view_hotel_form" model="ir.ui.view">
+        <field name="name">hotel.form</field>
+        <field name="model">hotel</field>
+        <field name="arch" type="xml">
+            <form string="Hotel">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="address"/>
+                        <field name="area"/>
+                        <field name="link"/>
+                        <field name="city_id"/>
+                        <field name="star_rating"/>
+                        <field name="rate"/>
+                        <field name="review_count"/>
+                        <field name="desc"/>
+                        <field name="img"/>
+                        <field name="contact_info"/>
+                        <field name="ln"/>
+                        <field name="lat"/>
+                        <field name="cleanliness_rate"/>
+                        <field name="service_rate"/>
+                        <field name="comfort_rate"/>
+                        <field name="amenities_rate"/>
+                     
+                        <field name="hotel_imgs"/>
+                        <field name="room_category"/>
+                  
+                    </group>
+                 
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

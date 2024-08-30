@@ -1,0 +1,21 @@
+<odoo>
+    <data noupdate="1">
+        <record id="seq_invoice_master" model="ir.sequence">
+            <field name="name">Invoice Master Sequence</field>
+            <field name="code">travels.invoice.master</field>
+            <field name="prefix">INV</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        <record id="seq_expense_master" model="ir.sequence">
+            <field name="name"> Expense Sequence</field>
+            <field name="code">travels.expense.detail</field>
+            <field name="prefix">EXP</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        
+        </data>
+</odoo>

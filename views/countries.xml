@@ -1,0 +1,64 @@
+<!-- country_views.xml -->
+<odoo>
+    <record id="view_country_tree" model="ir.ui.view">
+        <field name="name">country.tree</field>
+        <field name="model">country.model</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                    <field name="iso3"/>
+                    <field name="iso2"/>
+                    <field name="numeric_code"/>
+                    <field name="phone_code"/>
+                    <field name="currency"/>
+                    <field name="currency_name"/>
+                    <field name="currency_symbol"/>
+                    <field name="region"/>
+                    <field name="nationality"/>
+                    
+            </tree>
+            
+        </field>
+    </record>
+
+    <record id="view_country_form" model="ir.ui.view">
+        <field name="name">country.form</field>
+        <field name="model">country.model</field>
+        <field name="arch" type="xml">
+            <form string="Country">
+                <group>
+                    <field name="name"/>
+                    <field name="iso3"/>
+                    <field name="iso2"/>
+                    <field name="numeric_code"/>
+                    <field name="phone_code"/>
+                    <field name="currency"/>
+                    <field name="currency_name"/>
+                    <field name="currency_symbol"/>
+                    <field name="region"/>
+                    <field name="nationality"/>
+                 
+                </group>
+                <notebook>
+                    <page string="States">
+                        <field name="country_states_set">
+                            <tree editable="bottom">
+                                <field name="name"/>
+                                <field name="state_code"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Cities">
+                        <field name="country_city_set">
+                            <tree editable="bottom">
+                                <field name="name"/>
+                                <field name="state"/>
+                                <field name="img"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+</odoo>

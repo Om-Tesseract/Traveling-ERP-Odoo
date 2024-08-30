@@ -1,0 +1,161 @@
+<!-- templates.xml
+<templates>
+    <t t-name="DataGrid">
+        <table class="o_list_view table table-hover table-sm">
+            <thead class="thead-light">
+                <tr>
+                    <t t-foreach="props.columns" t-as="column" t-key="column.key">
+                        <th t-esc="column.name"/>
+                    </t>
+                </tr>
+            </thead>
+            <tbody>
+                <tr t-foreach="props.data" t-as="row" t-key="row.id">
+                    <td t-foreach="props.columns" t-as="column" t-key="column.key">
+                        <t t-if="column.key === 'actions'">
+                            <button type="button" class="btn btn-primary btn-sm" t-on-click="() => props.onEdit(row)">
+                                <i class="fa fa-edit" /> Edit
+                            </button>
+                            <button type="button" class="btn btn-danger mx-3 btn-sm" t-on-click="() => props.onDelete(row.id)">
+                                <i class="fa fa-trash" /> Delete
+                            </button>
+                        </t>
+                        <t t-if="column.key !== 'actions'">
+                            <t t-esc="row[column.key]" />
+                        </t>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </t>
+</templates> -->
+<templates>
+
+    <t t-name="travels_erp.DynamicDataGridTemplate">
+        <style>
+          
+            .o_list_view th {
+                position: relative; /* Ensure the resize handle is positioned correctly */
+                white-space: nowrap;
+            }
+            .resize-handle {
+               
+                width: 5px;
+                cursor: col-resize !important;
+                height: 20px;
+           
+            }
+            th{
+                user-select: none
+            }
+            <!-- .dropdown-fix {
+                position: absolute;
+                top: -10;
+                right: 0;
+                z-index: 1000;
+            } -->
+
+            <!-- .dropdown-fix{
+                z-index:1 !important;
+            } -->
+            <!-- .table-content{
+                min-height:300px !important;
+            } -->
+        </style>
+        
+        <table class="o_list_view table-content table table-hover table-sm">
+            <thead>
+                <tr class="position-relative">
+                    <t t-set="section_index" t-value="1"/>
+
+                    <t t-foreach="this.props.columns" t-as="col" t-key="section_index">
+                        <t t-set="section_index" t-value="section_index + 1"/>
+
+                        <th t-if="!col.option"  t-att-style="'width: ' + (col.width || 'auto') + ';'"  >
+                            <div class="w-100 d-flex justify-content-between ">
+
+                                <span class=" text-start">
+    
+                                    <t t-esc="col.name"/>
+                                    <t t-if="col.sortable" >
+                                        <span >
+        
+                                            <span class="sortable px-2" t-on-click="()=>sortColumn(col.key)">
+                                               
+                                                <i t-att-class="getSortClass(col.key)"></i>
+                                            </span>
+                                        </span>
+                                    </t>
+                                </span>
+                                <span class="resize-handle border-end text-end border-2 " t-if="!col.option" t-att-data-column-key="col.key"></span> 
+                            </div>
+                            
+                        </th>
+                    </t>
+                    <th style="width:50px">
+
+                        <div class="dropdown ">
+                              <button class="btn btn-secondary dropdown-toggle" type="button" id="manageColumnsDropdown" data-bs-toggle="dropdown"  title="Manage Columns" aria-expanded="false">
+                                  <i class="fa fa-sliders" aria-hidden="true"></i>
+                              </button>
+                              <ul class="dropdown-menu dropdown-fix" aria-labelledby="manageColumnsDropdown">
+                        <t t-set="section_index" t-value="1"/>
+
+                                  <t t-foreach="this.props.columns" t-as="col" t-key="section_index">
+                            <t t-set="section_index" t-value="section_index + 1"/>
+
+                                      <li>
+                                          <label class="dropdown-item">
+                                              <input type="checkbox"  class="me-2"  t-att-checked="!col.option" 
+                                                     t-on-change="()=>this.toggleColumn(col.key)" />
+                                              <t t-esc="col.name"/>
+                                             
+                                          </label>
+                                      </li>
+                                  </t>
+                              </ul>
+                          </div>
+                    </th>
+                        
+                </tr>
+            </thead>
+            <tbody>
+                <t  t-if="this.props.data">
+
+                    <t t-foreach="this.props.data || []" t-as="row" t-key="row.id">
+                        <tr class="align-middle">
+                            <t t-set="section_index" t-value="1"/>
+                            <t t-foreach="this.props.columns||[]" t-as="col" t-key="section_index">
+                                
+                                <t t-set="section_index" t-value="section_index + 1"/>
+                                <td t-if="!col.option" class="dynamic-cell"  t-att-colspan="col.key === this.props.columns[this.props.columns.length - 1].key ? 2 : undefined" >
+                                    <t t-if="col.renderCell">
+                                        <t t-out="col.renderCell(row)" />
+                                    </t>
+                                    <t t-if="!col.renderCell">
+                                        <t t-esc="row[col.key]"/>
+                                    </t>
+                                </td>
+                            </t>
+                        </tr>
+                    </t>
+                </t>
+                <t t-else="">
+                    <tr>
+                        <td colspan="100%" class=" text-center align-middle">
+                            <div class="o_view_nocontent_smiling_face ">
+                                <!-- You can add any custom message here -->
+                                <span>No data available.</span>
+                            </div>
+                        </td>
+                    </tr>
+                </t>
+            </tbody>
+        </table>
+    </t>
+
+       
+ 
+    
+</templates>

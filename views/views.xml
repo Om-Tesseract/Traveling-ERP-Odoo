@@ -1,0 +1,90 @@
+<odoo>
+  <data>
+    <menuitem name="Travels ERP" id="travels_erp.menu_root"/>
+    <record id="action_dashboard" model="ir.actions.client">
+      <field name="name">Dashboard</field>
+      <field name="tag">travel_dashboard</field>
+      </record>
+ 
+    <record id="action_itinerary" model="ir.actions.client">
+      <field name="name">Itinerary</field>
+      <field name="tag">travel_itinerary</field>
+      </record>
+    <record id="action_edit_itinerary" model="ir.actions.client">
+      <field name="name">Edit Itinerary</field>
+      <field name="tag">edit_itinerary</field>
+      <field name="params">{
+        "itinerary_id": context.get('itinerary_id', False)
+    }</field>
+      </record>
+
+      <menuitem name="Dashboard" 
+      id="menu_dashboard"
+      sequence="1" 
+      parent="travels_erp.menu_root"
+      action="action_dashboard"/>
+      
+      <menuitem name="Itinerary" 
+    id="menu_itinerary"
+    sequence="2" 
+    parent="travels_erp.menu_root"
+    action="action_itinerary"/>
+    
+    <!-- Action for Country -->
+    <record id="action_country" model="ir.actions.act_window">
+      <field name="name">Countries</field>
+      <field name="res_model">country.model</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <!-- Action for States -->
+    <record id="action_state" model="ir.actions.act_window">
+      <field name="name">States</field>
+      <field name="res_model">state.model</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Action for Cities -->
+    <record id="action_city" model="ir.actions.act_window">
+      <field name="name">Cities</field>
+      <field name="res_model">city.model</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    
+    <menuitem id="menu_country" parent="travels_erp.menu_root" name="Countries"
+      action="action_country" />
+      <menuitem id="menu_state" parent="travels_erp.menu_root" name="States" action="action_state" />
+    <menuitem id="menu_city" parent="travels_erp.menu_root" name="Cities" action="action_city" />
+    <!-- Action and Menu Items -->
+    <record id="action_hotel" model="ir.actions.act_window">
+      <field name="name">Hotels</field>
+      <field name="res_model">hotel</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="view_mode">tree,form</field>
+      <!-- <field name="view_id" ref="view_hotel_tree"/> -->
+  </record>
+    <menuitem id="menu_hotel" name="Hotels" parent="travels_erp.menu_root" action="action_hotel"/>
+    <menuitem id="menu_account_root" parent="travels_erp.menu_root" name="Accounting" sequence="10"/>
+ <!-- Action -->
+ <record id="action_invoice_master" model="ir.actions.act_window">
+  <field name="name">Invoices</field>
+  <field name="res_model">travels.invoice.master</field>
+  <field name="view_mode">tree,form</field>
+  <field name="domain"></field>
+
+</record>
+
+    <!-- Define Invoices under Accounting -->
+    <menuitem id="menu_invoice_master" name="Invoices" parent="menu_account_root" action="action_invoice_master" sequence="10"/>
+  <!-- Action -->
+  <record id="action_expense_detail" model="ir.actions.act_window">
+    <field name="name">Expenses</field>
+    <field name="res_model">travels.expense.detail</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain"></field>
+
+</record>
+
+    <!-- Define Expense Details under Accounting -->
+    <menuitem id="menu_expense_detail" name="Expense Details" parent="menu_account_root" action="action_expense_detail" sequence="11"/>
+  </data>
+</odoo>

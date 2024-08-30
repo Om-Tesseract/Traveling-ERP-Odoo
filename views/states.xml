@@ -1,0 +1,40 @@
+<!-- state_views.xml -->
+<odoo>
+    <record id="view_state_tree" model="ir.ui.view">
+        <field name="name">state.tree</field>
+        <field name="model">state.model</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="state_code"/>
+                <field name="country"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_state_form" model="ir.ui.view">
+        <field name="name">state.form</field>
+        <field name="model">state.model</field>
+        <field name="arch" type="xml">
+            <form string="State">
+                <group>
+                    <field name="name"/>
+                    <field name="state_code"/>
+                    <field name="country"/>
+                </group>
+                <notebook>
+                    <page string="Cities">
+                        <field name="state_city_set">
+                            <tree editable="bottom">
+                                <field name="name"/>
+                                <field name="country"/>
+                                <field name="img"/>
+                             
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+</odoo>

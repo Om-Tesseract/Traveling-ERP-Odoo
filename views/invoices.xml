@@ -1,0 +1,62 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_invoice_master_tree" model="ir.ui.view">
+        <field name="name">invoice.master.tree</field>
+        <field name="model">travels.invoice.master</field>
+        <field name="arch" type="xml">
+            <tree string="Invoices">
+                <field name="invoice_no"/>
+                <field name="invoice_date"/>
+                <field name="company_id"/>
+                <field name="package_id"/>
+                <field name="gross_amt"/>
+                <field name="net_amt"/>
+                <button name="print_invoice" type="object" class="oe_highlight" icon="fa-print" string="Print Invoice"/>
+
+            </tree>
+        </field>
+    
+    </record>
+
+    <!-- Form View -->
+    <record id="view_invoice_master_form" model="ir.ui.view">
+        <field name="name">invoice.master.form</field>
+        <field name="model">travels.invoice.master</field>
+        <field name="arch" type="xml">
+            <form string="Invoice">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="invoice_no"/>
+                        <h1><field name="invoice_no" readonly="1" placeholder="e.g. Customer Invoices"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                           
+                            <field name="invoice_type"/>
+                            <field name="invoice_date"/>
+                            <field name="customer_name"/>
+                            <!-- <field name="company_id" context="{'default_company_id': company_id}"/> -->
+                            <field name="package_id"/>
+                        </group>
+                        <group>
+                            <field name="gross_amt"/>
+                            <field name="gst"/>
+                            <field name="tax_amt"/>
+                            <field name="discount_amt"/>
+                            <field name="net_amt"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes"/>
+                        <field name="narration"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+   
+
+    <!-- Menuitem -->
+   
+</odoo>

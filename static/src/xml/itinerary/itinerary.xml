@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+  <t t-name="travel_itinerary_template">
+    <div class="main-content">
+
+      <div class="d-flex gap-1 o_control_panel d-flex align-items-center  px-3 pt-2 pb-2">
+        <!-- Button with text -->
+        <button class="btn btn-primary" data-hotkey="c" t-on-click="()=>openCreateForm()">Add</button>
+
+        <div class="active d-flex fs-4 min-w-0 align-items-center">
+          <span class="min-w-0 text-truncate text-left">
+            Itinerary
+          </span>
+        </div>
+      </div>
+      <div style="height:80vh" class="overflow-auto container-fluid main-table w-100">
+
+        <DataGridComponent
+          columns="state.columns"
+          data="state.data"
+          onSort="onSort"
+          sortColumn="state.sortColumn"
+          sortDirection="state.sortDirection"
+        />
+      </div>
+
+    </div>
+
+    <!-- Modal for creating a new entry -->
+    <t t-if="state.isModelOpen">
+      <div class="modal fade show" tabindex="-1" role="dialog" style="display: block;">
+        <div class="modal-dialog modal-xl" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Create New Itinerary</h5>
+              <button type="button" class="btn" aria-label="Close" t-on-click="()=>closeForm()">
+                <i aria-hidden="true" class="fa fa-times"></i>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="row">
+                  <div class="col-12 col-md-6">
+                    <h4 class="">
+                      DESTINATIONS
+                    </h4>
+                    <p class="mb-1">Enter the cities below in the order in which they will be
+                      visited for the itinerary:</p>
+                    <button class="btn btn-primary" type="button"  t-on-click="()=>addDestination()">
+                      Add Destination
+                    </button>
+                    <!-- <div class="row mx-1 px-2 my-2 position-relative border border-primary rounded">
+                      <div class="col-6 px-1 py-2 form-group">
+                          <label for="city">City</label>
+                          <input type="text" id="city" t-on-input="onChangeInput"  class="position-relative form-control"
+                                />
+                                <t t-if="state.isDropdownVisible">
+                                  
+                                  <ul  class="p-0 border rounded  shadow auto_complete_box list-style-none">
+                                    <t t-foreach="state.Options" t-as="val" t-key="val.value">
+                                      <li class="" t-on-click="()=>onClickSelect(val)" t-att-value="val.value"><t t-esc="val.label"/></li>
+                                    </t>
+                                 </ul>
+                                </t>
+                      </div>
+                      <div class="col-6 px-1 py-2 form-group">
+                          <label for="nights">Nights</label>
+                          <select class="form-select" id="nights" >
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                          </select>
+                      </div>
+                  </div> -->
+                    <t t-set="index" t-value="0"/>
+                    <t t-foreach="state.currentItinerary.destinations" t-as="destination" t-key="index">
+                    <t t-set="index" t-value="index+1"/>
+                      
+                      <div class="row align-items-center  mx-1 px-2 my-2 position-relative border border-primary rounded">
+                          <div class="col-6 px-1 py-2 ">
+                            <!-- <label for="city">City</label> -->
+                            <AutoComplete label="'City'"  options="state.Options" placeholder="'Typing a City'" onchange="onChangeCityInput" onSelect="onClickCitySelect" row_id="destination.row_id"/>
+                             
+                             
+                          </div>
+                          <div class="col-4 px-1 py-2 form-group">
+                              <label for="nights">Nights</label>
+                              <select class="form-select" id="nights" t-model="destination.nights">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                              </select> 
+                              
+                          </div>
+                          <div class="col-2 d-flex justify-content-center px-1">
+                            <button class="btn btn-danger rounded-circle" t-on-click="()=>deleteDestination(destination.row_id)">
+                              <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                          </div>
+                      </div>
+                  </t>
+                  
+                  </div>
+                  <div class="col-12  col-md-6">
+                    <div class="form-group">
+                      <label for="package_name">Package Name</label>
+                      <input type="text" id="package_name" class="form-control"
+                        t-model="state.currentItinerary.package_name" />
+                    </div>
+                    <div class="form-group">
+                      <AutoComplete label="'Customer'"  options="state.CustomerOptions" placeholder="'Typing a Customer'" onchange="onChangeCustomerInput" onSelect="onClickCustomerSelect" value=""/>
+                     
+                    </div>
+                    <div class="form-group">
+                      <AutoComplete label="'Leaving From'"  options="state.leavingfromOptions" placeholder="'Typing a Leaving From'" onchange="onChangeLeavingfromInput" onSelect="onClickLeavingfromSelect" value=""/>
+                     
+                   
+                    </div>
+                    <div class="form-group">
+                      <label for="nationality_id">Nationality</label>
+                      <select class="form-select" id="nationality_id"
+                        t-model="state.currentItinerary.nationality_id">
+                        <option value="">Select Nationality</option>
+                        <t t-foreach="state.nationalities" t-as="country" t-key="country.id">
+                          <option t-att-value="country.id" t-esc="country.nationality" />
+                        </t>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="leaving_on">Leaving On</label>
+                      <input type="date" id="leaving_on" class="form-control"
+                        t-model="state.currentItinerary.leaving_on" />
+                    </div>
+                    <div class="form-group">
+                      <label for="number_of_rooms">Number of Rooms</label>
+                      <input type="number" id="number_of_rooms" class="form-control"
+                        t-model="state.currentItinerary.number_of_rooms" />
+                    </div>
+                    <div class="form-group">
+                      <label for="number_of_adults">Number of Adults</label>
+                      <input type="number" id="number_of_adults" class="form-control"
+                        t-model="state.currentItinerary.number_of_adults" />
+                    </div>
+                    <div class="form-group">
+                      <label for="number_of_children">Number of Children</label>
+                      <input type="number" id="number_of_children" class="form-control"
+                        t-model="state.currentItinerary.number_of_children" />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="interests">Interests</label>
+                      <select class="form-select" id="interests"
+                        t-model="state.currentItinerary.interests">
+                        <option value="">Select Interests</option>
+                        <option value="honeymoon">Honeymoon</option>
+                        <option value="luxury">Luxury</option>
+                        <option value="leisure">Leisure</option>
+                        <option value="spa">Spa</option>
+                        <option value="history">History</option>
+                        <option value="art_and_culture">Art and Culture</option>
+                        <option value="adventure">Adventure</option>
+                        <option value="shopping">Shopping</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="nightlife">Nightlife</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="who_is_travelling">Who is Travelling</label>
+                      <!-- <input type="text" id="who_is_travelling" class="form-control"
+                      t-model="state.currentItinerary.who_is_travelling" /> -->
+                      <select class="form-select" id="who_is_travelling"
+                        t-model="state.currentItinerary.who_is_travelling">
+                        <option value="">Select Who is Travelling</option>
+                        <option value="couple">Couple</option>
+                        <option value="family">Family</option>
+                        <option value="friends">Friends</option>
+
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Additional Details</label>
+                      <div class="form-check">
+                        <input type="checkbox" id="pregnant_women" class="form-check-input"
+                          t-model="state.currentItinerary.pregnant_women" />
+                        <label class="form-check-label" for="pregnant_women">Pregnant Women</label>
+                      </div>
+                      <div class="form-check">
+                        <input type="checkbox" id="elderly_people" class="form-check-input"
+                          t-model="state.currentItinerary.elderly_people" />
+                        <label class="form-check-label" for="elderly_people">Elderly People</label>
+                      </div>
+                      <div class="form-check">
+                        <input type="checkbox" id="with_walking_difficulty" class="form-check-input"
+                          t-model="state.currentItinerary.with_walking_difficulty" />
+                        <label class="form-check-label" for="with_walking_difficulty">With Walking
+                          Difficulty</label>
+                      </div>
+                      <div class="form-check">
+                        <input type="checkbox" id="teenager" class="form-check-input"
+                          t-model="state.currentItinerary.teenager" />
+                        <label class="form-check-label" for="teenager">Teenager</label>
+                      </div>
+                      <div class="form-check">
+                        <input type="checkbox" id="women_only" class="form-check-input"
+                          t-model="state.currentItinerary.women_only" />
+                        <label class="form-check-label" for="women_only">Women Only</label>
+                      </div>
+                      <div class="form-check">
+                        <input type="checkbox" id="men_only" class="form-check-input"
+                          t-model="state.currentItinerary.men_only" />
+                        <label class="form-check-label" for="men_only">Men Only</label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="star_rating">Star Rating</label>
+                      <select class="form-select" id="star_rating"
+                        t-model="state.currentItinerary.star_rating">
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="add_transfers">Add Transfers</label>
+                      <input type="checkbox" id="add_transfers" class="form-check-input mx-1"
+                        t-model="state.currentItinerary.add_transfers" />
+                    </div>
+                    <div class="form-group">
+                      <label for="add_tours_and_travels">Add Tours and Travels</label>
+                      <input type="checkbox" id="add_tours_and_travels"
+                        class="form-check-input mx-1"
+                        t-model="state.currentItinerary.add_tours_and_travels" />
+                    </div>
+
+                  </div>
+                </div>
+
+              </form>
+            </div>
+            <div class="modal-footer">
+              <footer>
+                <button type="button" class="mx-1 btn btn-primary" t-on-click="saveItinerary">Save</button>
+
+                <button type="button" class="mx-1 btn btn-secondary" t-on-click="()=>closeForm()">
+                  Cancel</button>
+              </footer>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </t>
+  </t>
+</templates>

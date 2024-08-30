@@ -1,0 +1,45 @@
+<odoo>
+    <!-- Form View -->
+    <record id="view_road_transport_option_form" model="ir.ui.view">
+        <field name="name">road.transport.option.form</field>
+        <field name="model">travel.road.transport.option</field>
+        <field name="arch" type="xml">
+            <form string="Road Transport Option">
+                <sheet>
+                    <group>
+                        <field name="vehicle_type"/>
+                        <field name="seats"/>
+                        <field name="cost"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_road_transport_option_tree" model="ir.ui.view">
+        <field name="name">road.transport.option.tree</field>
+        <field name="model">travel.road.transport.option</field>
+        <field name="arch" type="xml">
+            <tree string="Road Transport Options">
+                <field name="vehicle_type"/>
+                <field name="seats"/>
+                <field name="cost"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_road_transport_option" model="ir.actions.act_window">
+        <field name="name">Road Transport Options</field>
+        <field name="res_model">travel.road.transport.option</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first road transport option
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_road_transport_option" name="Transport Options" parent="travels_erp.menu_root" action="action_road_transport_option"/>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="expense_record_user_rule" model="ir.rule">
+        <field name="name">Expense Record Rule</field>
+            <field ref="travels_erp.model_travels_expense_detail" name="model_id"/>
+            <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+          
+      </record>
+
+      <record id="invoice_record_user_rule" model="ir.rule">
+        <field name="name">Invocie records rule</field>
+            <field ref="travels_erp.model_travels_invoice_master" name="model_id"/>
+            <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+          
+      </record>
+
+</odoo>

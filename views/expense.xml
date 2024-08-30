@@ -1,0 +1,53 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_expense_detail_tree" model="ir.ui.view">
+        <field name="name">expense.detail.tree</field>
+        <field name="model">travels.expense.detail</field>
+        <field name="arch" type="xml">
+            <tree string="Expenses">
+                <field name="expense_no"/>
+                <field name="category"/>
+                <field name="date"/>
+                <field name="company_id"/>
+                <field name="package_id"/>
+                <field name="amount"/>
+                <field name="tax"/>
+                <field name="total_amount"/>
+          </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_expense_detail_form" model="ir.ui.view">
+        <field name="name">expense.detail.form</field>
+        <field name="model">travels.expense.detail</field>
+        <field name="arch" type="xml">
+            <form string="Expense">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="expense_no"/>
+                        <h1><field name="expense_no" readonly="1" placeholder="e.g. Expense No"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="package_id"/>
+                            <field name="date"/>
+                            <field name="category"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="tax"/>
+                            <field name="total_amount"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="purposes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+  
+  
+</odoo>
